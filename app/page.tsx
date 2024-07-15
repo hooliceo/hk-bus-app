@@ -98,7 +98,9 @@ export default function Home() {
     >
       <Box mb={8}>
         <Image
-          src="/hk-bus/ctbapp_logo.png"
+          src={`${
+            process.env.NODE_ENV == "production" ? "/hk-bus" : ""
+          }/ctbapp_logo.png`}
           width={50}
           height={50}
           alt="Citybus logo"
@@ -119,13 +121,13 @@ export default function Home() {
         textAlign="center"
       />
       <Select
+        style={{ textAlignLast: "center" }} // textAlign doesn't work on mobile
         variant="unstyled"
         cursor="pointer"
         value={direction}
         onChange={handleSelect}
         w={["80%", null, "50%"]}
         color="#fff"
-        textAlign="center"
         fontSize="24px"
         mb={4}
       >
