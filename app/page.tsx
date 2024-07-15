@@ -98,7 +98,7 @@ export default function Home() {
     >
       <Box mb={8}>
         <Image
-          src="/ctbapp_logo.png"
+          src="/hk-bus/ctbapp_logo.png"
           width={50}
           height={50}
           alt="Citybus logo"
