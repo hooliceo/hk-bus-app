@@ -1,0 +1,12 @@
+{
+  "name": "HK Bus",
+  "icons": [
+    {
+      "src": "ctbapp_logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "https://hooliceo.github.io/hk-bus/",
+  "display": "standalone"
+}

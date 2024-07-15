@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Head from "next/head";
 import { Inter } from "next/font/google";
 import { Providers } from "./providers";
 import "./globals.css";
@@ -17,6 +18,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        <link
+          rel="manifest"
+          href={`${
+            process.env.NODE_ENV == "production" ? "/hk-bus" : ""
+          }/manifest.json`}
+        />
+      </Head>
       <body className={`${inter.className} w-screen h-screen bg-gray-800`}>
         <Providers>{children}</Providers>
       </body>
