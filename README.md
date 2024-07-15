@@ -19,3 +19,4 @@ bun dev
 1. ~~Handle empty stops with no ETAs~~
 2. ~~Add loading to fetching stops~~
 3. Add favorites/history
+4. Turn into PWA
