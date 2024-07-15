@@ -7,6 +7,9 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/",
-  "display": "standalone"
+  "start_url": "/hk-bus",
+  "scope": "/hk-bus",
+  "display": "standalone",
+  "background_color": "#1F2937",
+  "theme_color": "#1F2937"
 }
