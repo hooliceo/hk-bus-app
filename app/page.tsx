@@ -104,19 +104,28 @@ export default function Home() {
         />
       </Box>
       <Input
+        variant="flushed"
         placeholder="Enter Route Number..."
         value={route}
         onChange={handleChange}
         w={["100%", null, "80%"]}
         p={4}
         mb={4}
-        bg="white"
+        border="none"
+        color="white"
+        fontSize="24px"
+        textAlign="center"
       />
       <Select
+        variant="unstyled"
+        cursor="pointer"
         value={direction}
         onChange={handleSelect}
         w={["100%", null, "80%"]}
-        bg="white"
+        color="#fff"
+        textAlign="center"
+        fontSize="24px"
+        mb={4}
       >
         <option value="inbound">Inbound</option>
         <option value="outbound">Outbound</option>
@@ -124,7 +133,9 @@ export default function Home() {
 
       <Box className="text-white" w={["100%", null, "80%"]} py={4}>
         {isLoading ? (
-          <Spinner />
+          <Flex justifyContent="center" alignItems="center">
+            <Spinner />
+          </Flex>
         ) : (
           <Estimates details={details} direction={direction} route={route} />
         )}

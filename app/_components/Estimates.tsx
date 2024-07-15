@@ -11,6 +11,7 @@ import {
   Box,
   Spinner,
   Text,
+  Flex,
 } from "@chakra-ui/react";
 
 const Estimates = ({
@@ -69,7 +70,9 @@ const Estimates = ({
 
                 <AccordionPanel>
                   {isLoading ? (
-                    <Spinner />
+                    <Flex justifyContent="center" alignItems="center" py={6}>
+                      <Spinner />
+                    </Flex>
                   ) : estimates.length ? (
                     estimates.map(({ eta }, i) => {
                       const time = new Date(eta);
