@@ -70,7 +70,7 @@ const Estimates = ({
 
                 <AccordionPanel>
                   {isLoading ? (
-                    <Flex justifyContent="center" alignItems="center" py={6}>
+                    <Flex justify="center" align="center" py={6}>
                       <Spinner />
                     </Flex>
                   ) : estimates.length ? (

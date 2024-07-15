@@ -46,7 +46,10 @@ export default function Home() {
       timeoutID = setTimeout(() => fetchBus(), 600);
     }
 
-    return () => clearTimeout(timeoutID);
+    return () => {
+      clearTimeout(timeoutID);
+      setIsLoading(false);
+    };
   }, [direction, route]);
 
   useEffect(() => {
@@ -88,11 +91,9 @@ export default function Home() {
   return (
     <Flex
       py={8}
-      w="400px"
-      h="600px"
       direction="column"
+      justify="center"
       align="center"
-      bg="#1E1E1E"
       overflow="scroll"
     >
       <Box mb={8}>
@@ -103,12 +104,13 @@ export default function Home() {
           alt="Citybus logo"
         />
       </Box>
+
       <Input
         variant="flushed"
         placeholder="Enter Route Number..."
         value={route}
         onChange={handleChange}
-        w={["100%", null, "80%"]}
+        w={["80%", null, "50%"]}
         p={4}
         mb={4}
         border="none"
@@ -121,19 +123,19 @@ export default function Home() {
         cursor="pointer"
         value={direction}
         onChange={handleSelect}
-        w={["100%", null, "80%"]}
+        w={["80%", null, "50%"]}
         color="#fff"
         textAlign="center"
         fontSize="24px"
         mb={4}
       >
-        <option value="inbound">Inbound</option>
-        <option value="outbound">Outbound</option>
+        <option value="inbound">INBOUND</option>
+        <option value="outbound">OUTBOUND</option>
       </Select>
 
-      <Box className="text-white" w={["100%", null, "80%"]} py={4}>
+      <Box className="text-white" w={["80%", null, "50%"]} py={4}>
         {isLoading ? (
-          <Flex justifyContent="center" alignItems="center">
+          <Flex justify="center" align="center">
             <Spinner />
           </Flex>
         ) : (
