@@ -8,8 +8,9 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-  Skeleton,
-  SkeletonText,
+  Box,
+  Spinner,
+  Text,
 } from "@chakra-ui/react";
 
 const Estimates = ({
@@ -26,14 +27,16 @@ const Estimates = ({
 
   const fetchETA = async (stopID: string) => {
     try {
-      setIsLoading(true);
-
       const res = await fetch(
         `https://rt.data.gov.hk/v2/transport/citybus/eta/ctb/${stopID}/${route}`
       );
       const { data } = await res.json();
 
-      setEstimates(data);
+      setEstimates(
+        data.filter(({ dir }: { dir: "I" | "O" }) =>
+          direction == "outbound" ? dir == "O" : dir == "I"
+        )
+      );
     } catch (err) {
       console.log(err);
     } finally {
@@ -42,49 +45,42 @@ const Estimates = ({
   };
 
   return (
-    <Accordion p={4} allowToggle>
+    <Accordion allowToggle>
       {details.map(({ id, en }: { id: string; en: string }) => {
         return (
-          <AccordionItem key={id}>
+          <AccordionItem key={id} mb={4} border="none">
             {({ isExpanded }) => (
               <>
                 <AccordionButton
+                  bg="#373737"
+                  _expanded={{ bg: "#1781E5", color: "#FFF" }}
                   className="cursor-pointer"
-                  onClick={() => !isExpanded && fetchETA(id)}
+                  onClick={() => {
+                    setIsLoading(true);
+
+                    !isExpanded && fetchETA(id);
+                  }}
                 >
-                  {en}
+                  <Box as="span" flex="1" textAlign="left">
+                    {en}
+                  </Box>
                   <AccordionIcon />
                 </AccordionButton>
 
                 <AccordionPanel>
-                  {isLoading
-                    ? estimates
-                        .filter(({ stop, dir }) =>
-                          direction == "outbound" ? dir == "O" : dir == "I"
-                        )
-                        .map((_, i) => (
-                          <SkeletonText
-                            key={i}
-                            mt="4"
-                            noOfLines={1}
-                            spacing="4"
-                            skeletonHeight="3"
-                            w={24}
-                          />
-                        ))
-                    : estimates
-                        .filter(({ stop, dir }) =>
-                          direction == "outbound" ? dir == "O" : dir == "I"
-                        )
-                        .map(({ eta }, i) => {
-                          const time = new Date(eta);
+                  {isLoading ? (
+                    <Spinner />
+                  ) : estimates.length ? (
+                    estimates.map(({ eta }, i) => {
+                      const time = new Date(eta);
 
-                          return (
-                            <div key={i}>
-                              {time.toLocaleTimeString("en-HK")}
-                            </div>
-                          );
-                        })}
+                      return (
+                        <div key={i}>{time.toLocaleTimeString("en-HK")}</div>
+                      );
+                    })
+                  ) : (
+                    <Text color="red">No ETA available</Text>
+                  )}
                 </AccordionPanel>
               </>
             )}
