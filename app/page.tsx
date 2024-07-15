@@ -1,18 +1,9 @@
 "use client";
 
-import {
-  ChangeEvent,
-  useEffect,
-  useState,
-  useReducer,
-  Suspense,
-  lazy,
-} from "react";
+import { ChangeEvent, useEffect, useState, useReducer } from "react";
 import { Select, Input } from "@chakra-ui/react";
 import { stopReducer } from "./_reducers/stopReducer";
-import Loading from "./_components/Loading";
-
-const Estimates = lazy(() => import("./_components/Estimates"));
+import Estimates from "./_components/Estimates";
 
 export type Details = Array<{ id: string; en: string; tc: string }>;
 export type Stops = Array<{ stop: string }>;
@@ -26,7 +17,7 @@ const initialStopState: StopStateType = { stops: [], details: [] };
 
 export default function Home() {
   const [route, setRoute] = useState("");
-  const [direction, setDirection] = useState("inbound");
+  const [direction, setDirection] = useState("outbound");
 
   const [state, dispatch] = useReducer(stopReducer, initialStopState);
   const { stops, details } = state;
@@ -109,9 +100,7 @@ export default function Home() {
       </Select>
 
       <div className="text-white">
-        <Suspense fallback={<Loading />}>
-          <Estimates details={details} route={route} />
-        </Suspense>
+        <Estimates details={details} direction={direction} route={route} />
       </div>
     </main>
   );
