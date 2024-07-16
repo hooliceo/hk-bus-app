@@ -4,7 +4,7 @@ import { ChangeEvent, useEffect, useState, useReducer } from "react";
 import Image from "next/image";
 import { Box, Flex, Input, Select, Spinner } from "@chakra-ui/react";
 import { stopReducer } from "./_reducers/stopReducer";
-import Estimates from "./_components/Estimates";
+import Stops from "./_components/Stops";
 
 export type Details = Array<{ id: string; en: string; tc: string }>;
 export type Stops = Array<{ stop: string }>;
@@ -43,7 +43,7 @@ export default function Home() {
     if (!!route) {
       setIsLoading(true);
 
-      timeoutID = setTimeout(() => fetchBus(), 600);
+      timeoutID = setTimeout(() => fetchBus(), 300);
     }
 
     return () => {
@@ -139,7 +139,7 @@ export default function Home() {
             <Spinner />
           </Flex>
         ) : (
-          <Estimates details={details} direction={direction} route={route} />
+          <Stops details={details} direction={direction} route={route} />
         )}
       </Box>
     </Flex>
