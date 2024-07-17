@@ -1,33 +1,26 @@
-"use client";
-
-import { Details } from "../page";
+import { StopType } from "../page";
 import { Accordion, AccordionItem } from "@chakra-ui/react";
 import Stop from "./Stop";
 import Estimates from "./Estimates";
 
 const Stops = ({
-  details,
   direction,
   route,
+  stops,
 }: {
-  details: Details;
   direction: string;
   route: string;
+  stops: Array<StopType>;
 }) => {
   return (
     <Accordion allowToggle>
-      {details.map(({ id, en }: { id: string; en: string }) => {
+      {stops.map(({ stop }: { stop: string }) => {
         return (
-          <AccordionItem mb={4} key={id} border="none">
+          <AccordionItem mb={6} key={stop} border="none">
             {() => (
               <>
-                <Stop en={en} />
-                <Estimates
-                  id={id}
-                  en={en}
-                  direction={direction}
-                  route={route}
-                />
+                <Stop id={stop} />
+                <Estimates id={stop} direction={direction} route={route} />
               </>
             )}
           </AccordionItem>

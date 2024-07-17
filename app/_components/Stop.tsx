@@ -1,18 +1,59 @@
-import { AccordionButton, AccordionIcon, Box } from "@chakra-ui/react";
+"use client";
 
-const Stop = ({ en }: { en: string }) => {
+import { useState, useEffect } from "react";
+import {
+  AccordionButton,
+  AccordionIcon,
+  Box,
+  Skeleton,
+} from "@chakra-ui/react";
+import { useInView } from "react-intersection-observer";
+
+const Stop = ({ id }: { id: string }) => {
+  const [{ en }, setStop] = useState<{ [key: string]: string | undefined }>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const { ref, inView } = useInView({ root: null });
+
+  useEffect(() => {
+    const getStop = async (stopID: string) => {
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          `https://rt.data.gov.hk/v2/transport/citybus/stop/${stopID}`
+        );
+
+        const { data } = await res.json();
+
+        setStop({
+          en: data.name_en,
+          tc: data.name_tc,
+        });
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (inView) getStop(id);
+  }, [id, inView]);
+
   return (
-    <AccordionButton
-      bg="#0282c7"
-      _expanded={{ bg: "#036aa1" }}
-      _hover={{ bg: "#075985" }}
-      className="cursor-pointer"
-    >
-      <Box as="span" flex="1" textAlign="left">
-        {en}
-      </Box>
-      <AccordionIcon />
-    </AccordionButton>
+    <Skeleton isLoaded={!isLoading} startColor="#075985" endColor="#0282c7">
+      <AccordionButton
+        bg="#0282c7"
+        _expanded={{ bg: "#036aa1" }}
+        _hover={{ bg: "#075985" }}
+        className="cursor-pointer"
+        ref={ref}
+        p={4}
+      >
+        <Box as="span" flex="0.9" textAlign="left" h="48px" overflow="scroll">
+          {en}
+        </Box>
+        <AccordionIcon flex="0.1" />
+      </AccordionButton>
+    </Skeleton>
   );
 };
 

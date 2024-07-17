@@ -6,15 +6,13 @@ import { Box, Flex, Input, Select, Spinner } from "@chakra-ui/react";
 import { stopReducer } from "./_reducers/stopReducer";
 import Stops from "./_components/Stops";
 
-export type Details = Array<{ id: string; en: string; tc: string }>;
-export type Stops = Array<{ stop: string }>;
+export type StopType = { stop: string };
 
 export interface StopStateType {
-  stops: Stops;
-  details: Details;
+  stops: Array<StopType>;
 }
 
-const initialStopState: StopStateType = { stops: [], details: [] };
+const initialStopState: StopStateType = { stops: [] };
 
 export default function Home() {
   const [route, setRoute] = useState("");
@@ -22,7 +20,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
 
   const [state, dispatch] = useReducer(stopReducer, initialStopState);
-  const { stops, details } = state;
+  const { stops } = state;
 
   useEffect(() => {
     let timeoutID: ReturnType<typeof setTimeout>;
@@ -37,6 +35,8 @@ export default function Home() {
         dispatch({ type: "stops", data });
       } catch (err) {
         console.log(err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -51,34 +51,6 @@ export default function Home() {
       setIsLoading(false);
     };
   }, [direction, route]);
-
-  useEffect(() => {
-    const fetchStopDetail = async () => {
-      try {
-        const stopData = stops.map(async ({ stop }: { stop: string }) => {
-          const res = await fetch(
-            `https://rt.data.gov.hk/v2/transport/citybus/stop/${stop}`
-          );
-
-          const { data } = await res.json();
-
-          return {
-            id: stop,
-            en: data.name_en,
-            tc: data.name_tc,
-          };
-        });
-
-        dispatch({ type: "details", details: await Promise.all(stopData) });
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (!!stops.length) fetchStopDetail();
-  }, [stops, dispatch]);
 
   const handleChange = (ev: ChangeEvent<HTMLInputElement>) => {
     setRoute(ev.target.value);
@@ -139,7 +111,7 @@ export default function Home() {
             <Spinner />
           </Flex>
         ) : (
-          <Stops details={details} direction={direction} route={route} />
+          <Stops direction={direction} route={route} stops={stops} />
         )}
       </Box>
     </Flex>

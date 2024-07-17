@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { AccordionPanel, Spinner, Text, Flex } from "@chakra-ui/react";
 
-const Estimates = ({ id, en, direction, route }: { [key: string]: string }) => {
+const Estimates = ({ id, direction, route }: { [key: string]: string }) => {
   const [estimates, setEstimates] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -32,8 +32,8 @@ const Estimates = ({ id, en, direction, route }: { [key: string]: string }) => {
   );
 
   useEffect(() => {
-    fetchETA(id);
-  }, [id, fetchETA]);
+    if (!!route) fetchETA(id);
+  }, [id, route, fetchETA]);
 
   return (
     <AccordionPanel>
