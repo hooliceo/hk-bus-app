@@ -14,9 +14,14 @@ const Stops = ({
 }) => {
   return (
     <Accordion allowToggle>
-      {stops.map(({ stop }: { stop: string }) => {
+      {stops.map(({ stop }, i) => {
         return (
-          <AccordionItem mb={6} key={stop} border="none">
+          <AccordionItem
+            mb={6}
+            key={`${stop}-${i}`}
+            border="none"
+            borderRadius="20px"
+          >
             {() => (
               <>
                 <Stop id={stop} />

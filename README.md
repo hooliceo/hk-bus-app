@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+A bus arrival time estimation app.
 
 ## Getting Started
 
@@ -18,5 +18,7 @@ bun dev
 
 1. ~~Handle empty stops with no ETAs~~
 2. ~~Add loading to fetching stops~~
-3. Add favorites/history
-4. ~~Turn into PWA~~
+3. ~~Turn into PWA~~
+4. ~~Add history~~
+   - May have to persist storage
+5. Fix inconsistent reveal of stops

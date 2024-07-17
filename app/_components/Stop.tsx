@@ -12,7 +12,7 @@ import { useInView } from "react-intersection-observer";
 const Stop = ({ id }: { id: string }) => {
   const [{ en }, setStop] = useState<{ [key: string]: string | undefined }>({});
   const [isLoading, setIsLoading] = useState(false);
-  const { ref, inView } = useInView({ root: null });
+  const { ref, inView } = useInView({ root: null, threshold: 0.5 });
 
   useEffect(() => {
     const getStop = async (stopID: string) => {
@@ -39,7 +39,7 @@ const Stop = ({ id }: { id: string }) => {
   }, [id, inView]);
 
   return (
-    <Skeleton isLoaded={!isLoading} startColor="#075985" endColor="#0282c7">
+    <Skeleton isLoaded={!isLoading} startColor="#0282c7" endColor="#075985">
       <AccordionButton
         bg="#0282c7"
         _expanded={{ bg: "#036aa1" }}

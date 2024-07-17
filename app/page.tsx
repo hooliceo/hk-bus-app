@@ -2,9 +2,11 @@
 
 import { ChangeEvent, useEffect, useState, useReducer } from "react";
 import Image from "next/image";
-import { Box, Flex, Input, Select, Spinner } from "@chakra-ui/react";
+import { Box, Flex, Input } from "@chakra-ui/react";
 import { stopReducer } from "./_reducers/stopReducer";
 import Stops from "./_components/Stops";
+import Direction from "./_components/Direction";
+import Favorites from "./_components/Favorites";
 
 export type StopType = { stop: string };
 
@@ -15,12 +17,25 @@ export interface StopStateType {
 const initialStopState: StopStateType = { stops: [] };
 
 export default function Home() {
-  const [route, setRoute] = useState("");
+  const [history, setHistory] = useState<Array<string>>([]);
+  const [route, setRoute] = useState<string>("");
   const [direction, setDirection] = useState("outbound");
   const [isLoading, setIsLoading] = useState(false);
 
   const [state, dispatch] = useReducer(stopReducer, initialStopState);
   const { stops } = state;
+
+  // To set state if localStorage history exists
+  useEffect(() => {
+    const storedHistory = JSON.parse(localStorage.getItem("history") || "[]");
+
+    if (!!storedHistory.length) setHistory(storedHistory);
+  }, []);
+
+  //Update localStorage as state changes
+  useEffect(() => {
+    localStorage.setItem("history", JSON.stringify(history));
+  }, [history]);
 
   useEffect(() => {
     let timeoutID: ReturnType<typeof setTimeout>;
@@ -37,6 +52,11 @@ export default function Home() {
         console.log(err);
       } finally {
         setIsLoading(false);
+        setHistory((prev) => {
+          if (history.length >= 5) prev.shift();
+
+          return !prev.includes(route) ? [...prev, route] : prev;
+        });
       }
     };
 
@@ -50,14 +70,10 @@ export default function Home() {
       clearTimeout(timeoutID);
       setIsLoading(false);
     };
-  }, [direction, route]);
+  }, [direction, history.length, route]);
 
   const handleChange = (ev: ChangeEvent<HTMLInputElement>) => {
     setRoute(ev.target.value);
-  };
-
-  const handleSelect = (ev: ChangeEvent<HTMLSelectElement>) => {
-    setDirection(ev.target.value);
   };
 
   return (
@@ -83,36 +99,28 @@ export default function Home() {
         value={route}
         onChange={handleChange}
         w={["80%", null, "50%"]}
-        p={4}
-        mb={4}
+        py={8}
+        mb={6}
         border="none"
         color="white"
-        fontSize="24px"
+        fontSize={["24px", null, "36px"]}
         textAlign="center"
       />
-      <Select
-        style={{ textAlignLast: "center" }} // textAlign doesn't work on mobile
-        variant="unstyled"
-        cursor="pointer"
-        value={direction}
-        onChange={handleSelect}
-        w={["80%", null, "50%"]}
-        color="#fff"
-        fontSize="24px"
-        mb={4}
-      >
-        <option value="inbound">INBOUND</option>
-        <option value="outbound">OUTBOUND</option>
-      </Select>
+
+      <Direction
+        direction={direction}
+        isLoading={isLoading}
+        setDirection={setDirection}
+      />
+
+      <Favorites
+        history={history}
+        setHistory={setHistory}
+        setRoute={setRoute}
+      />
 
       <Box className="text-white" w={["80%", null, "50%"]} py={4}>
-        {isLoading ? (
-          <Flex justify="center" align="center">
-            <Spinner />
-          </Flex>
-        ) : (
-          <Stops direction={direction} route={route} stops={stops} />
-        )}
+        <Stops direction={direction} route={route} stops={stops} />
       </Box>
     </Flex>
   );
