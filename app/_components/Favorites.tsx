@@ -1,4 +1,12 @@
-import { HStack, Tag, TagCloseButton, TagLabel } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  HStack,
+  Tag,
+  TagCloseButton,
+  TagLabel,
+} from "@chakra-ui/react";
+import { DeleteIcon } from "@chakra-ui/icons";
 
 const Favorites = ({
   history,
@@ -22,30 +30,48 @@ const Favorites = ({
     setHistory((prev) => {
       prev.splice(idx, 1);
 
-      console.log(prev);
-
       return [...prev];
     });
+  };
 
-    setRoute("");
+  const handleClear = () => {
+    setHistory(() => []);
   };
 
   return (
-    <HStack w={["80%", null, "50%"]}>
-      {history.map((entry, idx) => (
-        <Tag
-          variant="solid"
-          colorScheme="whiteAlpha"
-          key={entry}
-          size={["md", "lg"]}
-          cursor="pointer"
-          onClick={() => handleClick(entry)}
-        >
-          <TagLabel>{entry}</TagLabel>
-          <TagCloseButton onClick={(ev) => handleClose(ev, idx)} />
-        </Tag>
-      ))}
-    </HStack>
+    !!history.length && (
+      <Flex w={["80%", null, "50%"]} justify="space-between">
+        <HStack flexWrap="wrap">
+          {history.map((entry, idx) => (
+            <Tag
+              variant="solid"
+              colorScheme="whiteAlpha"
+              key={entry}
+              size={["sm", "lg"]}
+              cursor="pointer"
+              onClick={() => handleClick(entry)}
+            >
+              <TagLabel>{entry}</TagLabel>
+              <TagCloseButton onClick={(ev) => handleClose(ev, idx)} />
+            </Tag>
+          ))}
+        </HStack>
+
+        {history.length >= 3 && (
+          <Flex
+            color="#E53E3E"
+            align="center"
+            cursor="pointer"
+            onClick={handleClear}
+          >
+            <Box as="span" display={["none", "inline"]}>
+              Clear
+            </Box>
+            <DeleteIcon ml={2} />
+          </Flex>
+        )}
+      </Flex>
+    )
   );
 };
 

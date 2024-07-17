@@ -35,6 +35,8 @@ export default function Home() {
   //Update localStorage as state changes
   useEffect(() => {
     localStorage.setItem("history", JSON.stringify(history));
+
+    setRoute("");
   }, [history]);
 
   useEffect(() => {
@@ -48,15 +50,15 @@ export default function Home() {
         const { data } = await res.json();
 
         dispatch({ type: "stops", data });
+
+        if (!!data.length)
+          setHistory((prev) => {
+            return !prev.includes(route) ? [...prev, route] : prev;
+          });
       } catch (err) {
         console.log(err);
       } finally {
         setIsLoading(false);
-        setHistory((prev) => {
-          if (history.length >= 5) prev.shift();
-
-          return !prev.includes(route) ? [...prev, route] : prev;
-        });
       }
     };
 
