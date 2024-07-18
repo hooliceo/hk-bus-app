@@ -22,3 +22,4 @@ bun dev
 4. ~~Add history~~
    - May have to persist storage
 5. Fix inconsistent reveal of stops
+6. Add KMB
