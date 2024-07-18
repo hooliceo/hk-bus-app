@@ -35,8 +35,6 @@ export default function Home() {
   //Update localStorage as state changes
   useEffect(() => {
     localStorage.setItem("history", JSON.stringify(history));
-
-    setRoute("");
   }, [history]);
 
   useEffect(() => {
@@ -72,7 +70,7 @@ export default function Home() {
       clearTimeout(timeoutID);
       setIsLoading(false);
     };
-  }, [direction, history.length, route]);
+  }, [direction, route]);
 
   const handleChange = (ev: ChangeEvent<HTMLInputElement>) => {
     setRoute(ev.target.value);
@@ -89,8 +87,8 @@ export default function Home() {
       <Box mb={8}>
         <Image
           src={"/hk-bus/ctbapp_logo.png"}
-          width={50}
-          height={50}
+          width={65}
+          height={65}
           alt="Citybus logo"
         />
       </Box>
@@ -105,7 +103,7 @@ export default function Home() {
         mb={6}
         border="none"
         color="white"
-        fontSize={["24px", null, "36px"]}
+        fontSize={["36px", null, "48px"]}
         textAlign="center"
       />
 
