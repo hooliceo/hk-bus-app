@@ -147,7 +147,7 @@ export default function Home() {
         onClick={handleRefresh}
         isDisabled={!route || isLoading}
         _hover={{ bg: "transparent", opacity: 0.5 }}
-        position="absolute"
+        position="fixed"
         bottom="20px"
         right="20px"
         color="#fff"
