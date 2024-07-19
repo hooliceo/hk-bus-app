@@ -1,17 +1,8 @@
 import { StopType } from "../page";
 import { Accordion, AccordionItem } from "@chakra-ui/react";
 import Stop from "./Stop";
-import Estimates from "./Estimates";
 
-const Stops = ({
-  direction,
-  route,
-  stops,
-}: {
-  direction: string;
-  route: string;
-  stops: Array<StopType>;
-}) => {
+const Stops = ({ stops }: { stops: Array<StopType> }) => {
   return (
     <Accordion allowToggle>
       {stops.map(({ stop }, i) => {
@@ -22,12 +13,7 @@ const Stops = ({
             border="none"
             borderRadius="20px"
           >
-            {() => (
-              <>
-                <Stop id={stop} />
-                <Estimates id={stop} direction={direction} route={route} />
-              </>
-            )}
+            {() => <Stop id={stop} />}
           </AccordionItem>
         );
       })}

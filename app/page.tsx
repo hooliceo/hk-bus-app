@@ -1,12 +1,18 @@
 "use client";
 
 import { ChangeEvent, useEffect, useState, useReducer } from "react";
+import { RepeatClockIcon } from "@chakra-ui/icons";
 import Image from "next/image";
-import { Box, Flex, Input } from "@chakra-ui/react";
+import { Box, Button, Flex, Input } from "@chakra-ui/react";
 import { stopReducer } from "./_reducers/stopReducer";
 import Stops from "./_components/Stops";
 import Direction from "./_components/Direction";
 import Favorites from "./_components/Favorites";
+import {
+  EstimateContext,
+  DirectionContext,
+  RouteContext,
+} from "./_contexts/contexts";
 
 export type StopType = { stop: string };
 
@@ -19,8 +25,11 @@ const initialStopState: StopStateType = { stops: [] };
 export default function Home() {
   const [history, setHistory] = useState<Array<string>>([]);
   const [route, setRoute] = useState<string>("");
-  const [direction, setDirection] = useState("outbound");
+  const [direction, setDirection] = useState<"outbound" | "inbound">(
+    "outbound"
+  );
   const [isLoading, setIsLoading] = useState(false);
+  const [isRefetch, setIsRefetch] = useState(false);
 
   const [state, dispatch] = useReducer(stopReducer, initialStopState);
   const { stops } = state;
@@ -76,6 +85,10 @@ export default function Home() {
     setRoute(ev.target.value);
   };
 
+  const handleRefresh = () => {
+    setIsRefetch(true);
+  };
+
   return (
     <Flex
       py={8}
@@ -95,7 +108,7 @@ export default function Home() {
 
       <Input
         variant="flushed"
-        placeholder="Enter Route Number..."
+        placeholder="Type here..."
         value={route}
         onChange={handleChange}
         w={["80%", null, "50%"]}
@@ -120,8 +133,27 @@ export default function Home() {
       />
 
       <Box className="text-white" w={["80%", null, "50%"]} py={4}>
-        <Stops direction={direction} route={route} stops={stops} />
+        <EstimateContext.Provider value={{ isRefetch, setIsRefetch }}>
+          <DirectionContext.Provider value={direction}>
+            <RouteContext.Provider value={route}>
+              <Stops stops={stops} />
+            </RouteContext.Provider>
+          </DirectionContext.Provider>
+        </EstimateContext.Provider>
       </Box>
+
+      <Button
+        variant="ghost"
+        onClick={handleRefresh}
+        isDisabled={!route || isLoading}
+        _hover={{ bg: "transparent", opacity: 0.5 }}
+        position="absolute"
+        bottom="20px"
+        right="20px"
+        color="#fff"
+      >
+        <RepeatClockIcon color="#fff" cursor="pointer" w={8} h={8} />
+      </Button>
     </Flex>
   );
 }

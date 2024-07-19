@@ -8,7 +8,7 @@ const Direction = ({
 }: {
   direction: string;
   isLoading: boolean;
-  setDirection: (arg0: string) => void;
+  setDirection: (arg0: "outbound" | "inbound") => void;
 }) => {
   const handleClick = (dir: "outbound" | "inbound") => {
     setDirection(dir);

@@ -1,11 +1,19 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { AccordionPanel, Spinner, Text, Flex } from "@chakra-ui/react";
+import {
+  EstimateContext,
+  DirectionContext,
+  RouteContext,
+} from "../_contexts/contexts";
 
-const Estimates = ({ id, direction, route }: { [key: string]: string }) => {
+const Estimates = ({ id, inView }: { id: string; inView: boolean }) => {
   const [estimates, setEstimates] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { isRefetch, setIsRefetch } = useContext(EstimateContext);
+  const direction = useContext(DirectionContext);
+  const route = useContext(RouteContext);
 
   const fetchETA = useCallback(
     async (stopID: string) => {
@@ -13,7 +21,8 @@ const Estimates = ({ id, direction, route }: { [key: string]: string }) => {
         setIsLoading(true);
 
         const res = await fetch(
-          `https://rt.data.gov.hk/v2/transport/citybus/eta/ctb/${stopID}/${route}`
+          `https://rt.data.gov.hk/v2/transport/citybus/eta/ctb/${stopID}/${route}`,
+          { cache: "no-store" }
         );
         const { data } = await res.json();
 
@@ -26,14 +35,19 @@ const Estimates = ({ id, direction, route }: { [key: string]: string }) => {
         console.log(err);
       } finally {
         setIsLoading(false);
+        setIsRefetch(false);
       }
     },
-    [direction, route]
+    [direction, route, setIsRefetch]
   );
 
   useEffect(() => {
     if (!!route) fetchETA(id);
   }, [id, route, fetchETA]);
+
+  useEffect(() => {
+    if (isRefetch && inView) fetchETA(id);
+  }, [id, fetchETA, isRefetch, inView]);
 
   return (
     <AccordionPanel>

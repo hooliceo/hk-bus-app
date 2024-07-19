@@ -21,5 +21,6 @@ bun dev
 3. ~~Turn into PWA~~
 4. ~~Add history~~
    - May have to persist storage
-5. Fix inconsistent reveal of stops
-6. Add KMB
+5. ~~Add refresh button~~
+6. Fix inconsistent reveal of stops
+7. Add KMB
